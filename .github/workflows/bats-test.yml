@@ -14,9 +14,9 @@ steps:
   uses: actions/checkout@v4
 
 - name: Install BATS
-   run: |
-        sudo apt update
-        sudo apt install bats -y
+  run: |
+     sudo apt update
+     sudo apt install bats -y
 - name: Make script executable
   run: chmod +x sys_health.sh
 
