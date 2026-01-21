@@ -40,7 +40,7 @@ jobs:
 
       - name: Make script executable
 
-        run: chmod +x sys_health.sh
+        run: chmod +x health.sh
 
 
 
