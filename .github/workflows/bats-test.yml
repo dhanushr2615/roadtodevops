@@ -1,25 +1,51 @@
 name: BATS TEST
 
+
+
 on:
-    pull_request:
-      branches:
-            - main
+
+  pull_request:
+
+    branches:
+
+      - main
+
+
 
 jobs:
+
   bats-test:
+
     runs-on: ubuntu-latest
 
-   steps:
+
+
+    steps:
+
       - name: Checkout code
+
         uses: actions/checkout@v4
 
+
+
       - name: Install BATS
+
         run: |
+
           sudo apt update
-          sudo apt install bats -y
+
+          sudo apt install -y bats
+
+
+
       - name: Make script executable
+
         run: chmod +x sys_health.sh
 
+
+
       - name: Run BATS tests
+
         run: bats tests/
+
 
