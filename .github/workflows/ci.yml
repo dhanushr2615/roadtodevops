@@ -16,5 +16,5 @@ jobs:
 
 
          - name: Run basic check
-            run: echo "CI Pipeline is working"
+           run: echo "CI Pipeline is working"
 
