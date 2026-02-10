@@ -18,6 +18,6 @@ pipeline{
 	 always {
  		archiveArtifacts artifacts: '/tmp/health.log' , fingerprint: true
 }
-
+}
 }
 
