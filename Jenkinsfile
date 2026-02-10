@@ -4,9 +4,15 @@ pipeline{
 	stages{
 	   stage('Fetch Code'){
 		steps{
-		   echo 'Successfully Fetched code from Github!!'
-		   sh 'ls-art' 
-		}		
-            }
+		   echo 'Successfully Fetched code from Github!!' 
+		}         
+   }
+	   stage('Test'){
+		steps{
+		 sh 'sh_scripts/health.sh'
+                }
+	}
+
         }
+
 }
