@@ -16,6 +16,7 @@ pipeline{
         }
 	post {
 	 always {
+		sh 'chmod +x o /tmp/health.log'
 		sh 'cp /tmp/health.log'
 		
  		archiveArtifacts artifacts: '/tmp/health.log' , fingerprint: true
