@@ -16,6 +16,8 @@ pipeline{
         }
 	post {
 	 always {
+		sh 'cp /tmp/health.log'
+		
  		archiveArtifacts artifacts: '/tmp/health.log' , fingerprint: true
 }
 }
