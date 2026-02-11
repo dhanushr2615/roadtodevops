@@ -19,7 +19,7 @@ pipeline{
 		sh 'chmod 755 /tmp/health.log'
 		sh 'cat /tmp/health.log'
 		
- 		archiveArtifacts artifacts: '/tmp/health.log' , fingerprint: true
+ 		archiveArtifacts artifacts: '~/tmp/health.log' , fingerprint: true
 }
 }
 }
