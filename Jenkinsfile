@@ -17,7 +17,7 @@ pipeline{
 	post {
 	 always {
 		sh 'chmod 755 /tmp/health.log'
-		sh 'cp /tmp/health.log'
+		sh 'cat /tmp/health.log'
 		
  		archiveArtifacts artifacts: '/tmp/health.log' , fingerprint: true
 }
