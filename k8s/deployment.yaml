@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pizza-deployment
+spec:
+  replication: 2 #run 2 copies for H/A
+  selector:
+  matchLabels:
+    app: pizza
+  template:
+    metadata:
+      labels:
+         app: pizza
+      spec:
+        containers:
+        - name: pizza-container
+          image: my-pizza-repo:latest
+          ports:
+            - containerPort: 3000
+          env:
+          - name: PIZZA_TYPE
+            value: "Pepparoni"
+
