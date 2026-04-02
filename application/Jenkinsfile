@@ -22,6 +22,19 @@ pipeline{
 		}
 	}
   
+	stage('Debug Library") {
+	 steps {
+	    script {
+		echo "---Listing the files---"
+		sh "ls -l ${env.WORKSPACE}@libs/my-shared-library/vars"
+		}
+	     }
+	}
+        stage('Global Build') {
+	    steps {
+		smartBuild(imageName: 'pizza-app')
+		}
+	    }
       }
 
 }
