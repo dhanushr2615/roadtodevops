@@ -1,4 +1,4 @@
-@Library('my-shared-library@main') _
+// @Library('my-shared-library@main') _
 
 pipeline{
 	agent any
@@ -16,5 +16,10 @@ pipeline{
 		sh "kubectl apply -f k8s/deployment.yaml"
 		}
 	}
-  }
+	stage('Debug Structure') {
+		sh "ls -R .."
+	}
+  
+}
+
 }
