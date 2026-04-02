@@ -8,15 +8,6 @@ pipeline {
 	agent any
 
 	stages{
-	    stage('verify library Content') {
-                steps {
-                    script {
-                          echo "Checking if smartBuild exists in the DSL...."
-			  def hasMethod = this.respondsTo('smartBuild')
-		          echo "does smartBuild exist ? ${hasMethod}"
-			}
-		}
-	}
 		stage('Execute Shared Library') {
 		  steps {
 			script {
