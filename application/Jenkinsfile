@@ -1,40 +1,30 @@
- @Library('my-shared-library@main') _
+library identifier: 'my-shared-library@main', retriever: modernSCM(
+   [$class: 'GitSCMSource',
+    remote: 'https://github.com/dhanushr2615/roadtodevops.git',
+    credentialsId: 'github-token_PAT']
+)
+_
 
-pipeline{
+pipeline {
 	agent any
-	environment {
-		IMAGE = "my-pizza-repo"
-	}
-	stages{
-	    stage('Global Build') {
-		steps {
-		    smartBuild(imageName: env.IMAGE)
-		}
-	}
-	stage('Kubernetes Deploy') {
-           steps {
-		sh "kubectl apply -f k8s/deployment.yaml"
-		}
-	}
-	stage('Debug Structure') {
-	   steps {
-		sh "ls -R .."
-		}
-	}
-  
-	stage('Debug Library') {
-	 steps {
-	    script {
-		echo "---Listing the files---"
-		sh "ls -l ${env.WORKSPACE}@libs/my-shared-library/vars"
-		}
-	     }
-	}
-        stage('Global Builds') {
-	    steps {
-		smartBuild(imageName: 'pizza-app')
-		}
-	    }
-      }
 
+	stages{
+	    stage('verify library Content') {
+                steps {
+                    script {
+                          echo "Checking if smartBuild exists in the DSL...."
+			  def hasMethod = this.respondsTo('smartBuild')
+		          echo "does smartBuild exist ? ${hasMethod}"
+			}
+		}
+	}
+		stage('Execute Shared Library') {
+		  steps {
+			script {
+				smartBuild(imageName: 'pizza-mini-project')
+				}
+			}
+		}
+	}
 }
+
