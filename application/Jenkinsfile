@@ -30,7 +30,7 @@ pipeline{
 		}
 	     }
 	}
-        stage('Global Build') {
+        stage('Global Builds') {
 	    steps {
 		smartBuild(imageName: 'pizza-app')
 		}
