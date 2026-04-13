@@ -34,5 +34,15 @@ pipeline {
 			junit '**/target/surefire-reports/*.xml'
 			}
 		}
+	    stage('Deploy to Staging')
+		steps {
+		      deployToeEnv('staging')
+			}
+		}
+	    stage('Deploy to Production') {
+		steps {
+		      deployToEnv('production')
+			}
+		}
 	}
 }
