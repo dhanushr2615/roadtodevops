@@ -1,20 +1,38 @@
-library identifier: 'my-shared-library@main', retriever: modernSCM(
-   [$class: 'GitSCMSource',
-    remote: 'https://github.com/dhanushr2615/roadtodevops.git',
-    credentialsId: 'github-token_PAT']
-)_
+@Library('my-shared-lib') _
 
 pipeline {
 	agent any
+	
+	stages {
+	    stage('Checkout') {
+		steps {
+			git branch: 'main' , url: 'https://github.com/dhanushr2615/roadtodevops.git'
+			}
+		}
+	     
+            stage('Install') {
+		steps {
+		       sh 'mvn clean install'
+			}
+		}
 
-	stages{
-		stage('Execute Shared Library') {
-		  steps {
-			script {
-				smartBuild(imageName: 'pizza-mini-project')
-				}
+	    stage('Test') {
+		steps {
+			runTests()
+			}
+		}
+
+	    stage('Versioning') {
+		steps {
+		       sh 'mvn --version'
+			}
+		}
+
+	    stage('Archiving') {
+                steps {
+			archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+			junit '**/target/surefire-reports/*.xml'
 			}
 		}
 	}
 }
-
