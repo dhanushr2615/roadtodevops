@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pizza-deployment
+  name: App-Server
 spec:
   replication: 2 #run 2 copies for H/A
   selector:
   matchLabels:
-    app: pizza
+    app: App
   template:
     metadata:
       labels:
-         app: pizza
+         app: App
       spec:
         containers:
-        - name: pizza-container
+        - name: App-server
           image: my-pizza-repo:latest
           ports:
             - containerPort: 3000
