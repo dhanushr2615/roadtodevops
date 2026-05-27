@@ -19,10 +19,10 @@ pipeline {
 
 	    stage('Verify Deployment') {
 		steps {
-		     sh '''
-		     kubectl get pods -n demo
-		     kubectl get svc -n demo
-		      '''
+			sh '''
+			kubectl get pods -n demo
+			kubectl get svc -n demo
+			'''
 			}
 		}
 	}
