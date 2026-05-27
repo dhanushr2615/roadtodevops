@@ -1,8 +1,5 @@
-@Library('my-shared-lib') _
-
 pipeline {
-	agent any
-	
+	agent { label 'slave' }
 	stages {
 	    stage('Checkout') {
 		steps {
@@ -10,38 +7,22 @@ pipeline {
 			}
 		}
 	     
-            stage('Install') {
+            stage('Terraform apply') {
 		steps {
-		       sh 'mvn clean install'
+		       sh '''
+			cd terraform
+			terraform init
+			terraform apply -auto-approve
+			'''
 			}
 		}
 
-	    stage('Test') {
+	    stage('Verify Deployment') {
 		steps {
-			runTests()
-			}
-		}
-
-	    stage('Versioning') {
-		steps {
-		       sh 'mvn --version'
-			}
-		}
-
-	    stage('Archiving') {
-                steps {
-			archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
-			junit '**/target/surefire-reports/*.xml'
-			}
-		}
-	    stage('Deploy to Staging')
-		steps {
-		      deployToeEnv('staging')
-			}
-		}
-	    stage('Deploy to Production') {
-		steps {
-		      deployToEnv('production')
+		     sh '''
+		     kubectl get pods -n demo
+		     kubectl get svc -n demo
+		      '''
 			}
 		}
 	}
