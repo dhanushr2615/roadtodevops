@@ -4,7 +4,7 @@ variable "namespace" {
   default       =  "demo"
 }
 
-variable "app_name" {
+variable "appname" {
   description   = "Application Name"
   type          = string
   default       = "demo-app"

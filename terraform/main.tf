@@ -13,7 +13,7 @@ resource "kubernetes_namespace" "app_ns" {
 # ConfigMap
 resource "kubernetes_config_map" "app_config" {
   metadata {
-	name        = "${var.app_name}-config"
+	name        = "${var.appname}-config"
 	namespace   = var.namespace
       }
 
@@ -26,7 +26,7 @@ resource "kubernetes_config_map" "app_config" {
 # Secret
 resource "kubernetes_secret" "app_secret" {
    metadata {
-	name       = "${var.app_name}-secret"
+	name       = "${var.appname}-secret"
 	namespace  = var.namespace
       }
      
@@ -39,7 +39,7 @@ resource "kubernetes_secret" "app_secret" {
 # Deploy Nginx app
 resource "kubernetes_deployment" "app" {
   metadata {
-	name      = "${var.app_name}-deployment"
+	name      = "${var.appname}-deployment"
 	namespace = var.namespace
 }
 
@@ -47,18 +47,18 @@ spec {
    replicas = var.replicas
    selector {
       match_labels = {
-	 app = var.app_name
+	 app = var.appname
 	}
       }
      template {
 	metadata {
 	  labels = {
-	     app = var.app_name
+	     app = var.appname
 	    }
 	}
        spec {
 	container {
-	  name  = var.app_name  
+	  name  = var.appname  
 	  image = var.image
 
 	   env_from {
@@ -84,12 +84,12 @@ spec {
 # Expose the app via nodeport
 resource "kubernetes_service" "app_service" {
    metadata {
-	name       = "${var.app_name}-service"
+	name       = "${var.appname}-service"
 	namespace  = var.namespace
       }
    spec {
 	selector = {
-	   app = var.app_name
+	   app = var.appname
 	}
 	port {
 	  port	      = 80
