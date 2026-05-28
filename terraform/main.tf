@@ -4,36 +4,74 @@ provider "kubernetes" {
 }
 
 # Create a namespace
-resource "kubernetes_namespace" "demo" {
+resource "kubernetes_namespace" "app_ns" {
   metadata {
-	name         = "demo"
+	name         = var.namespace
    }
 }
 
-# Deploy Nginx app
-resource "kubernetes_deployment" "nginx" {
+# ConfigMap
+resource "kubernetes_config_map" "app_config" {
   metadata {
-	name      = "nginx-deployment"
-	namespace = kubernetes_namespace.demo.metadata[0].name
+	name        = "${var.app_name}-config"
+	namespace   = var.namespace
+      }
+
+	data = {
+	   APP_ENV  = "dev"
+	   APP_MODE = "debug"
+	}
+    }
+
+# Secret
+resource "kubernetes_secret" "app_secret" {
+   metadata {
+	name       = "${var.app_name}-secret"
+	namespace  = var.namespace
+      }
+     
+    data = {
+	DB_USER = base64encode("admin")
+	DB_PASS = base64encode("Passw0rd")
+	}
+     }
+
+# Deploy Nginx app
+resource "kubernetes_deployment" "app" {
+  metadata {
+	name      = "${var.app_name}-deployment"
+	namespace = var.namespace
 }
 
 spec {
-   replicas = 2
+   replicas = var.replicas
    selector {
       match_labels = {
-	 app = "nginx"
+	 app = var.app_name
 	}
       }
      template {
 	metadata {
 	  labels = {
-	     app = "nginx"
+	     app = var.app_name
 	    }
 	}
        spec {
 	container {
-	  name  = "nginx"  
-	  image = "nginx:latest"
+	  name  = var.app_name  
+	  image = var.image
+
+	   env_from {
+		config_map_ref {
+			name = kubernetes_config_map.app_config.metadata[0].name
+			}
+		}
+	    env_from {
+   	       secret_ref {
+			name = kubernetes_secret.app_secret.metadata[0].name
+			}
+		}
+
 	  port {
 		container_port = 80
 		}
@@ -44,19 +82,19 @@ spec {
 }
 
 # Expose the app via nodeport
-resource "kubernetes_service" "nginx" {
+resource "kubernetes_service" "app_service" {
    metadata {
-	name       = "nginx-service"
-	namespace  = kubernetes_namespace.demo.metadata[0].name
+	name       = "${var.app_name}-service"
+	namespace  = var.namespace
       }
    spec {
 	selector = {
-	   app = "nginx"
+	   app = var.app_name
 	}
 	port {
 	  port	      = 80
 	  target_port = 80
 	}
-	type = "NodePort"
+	type = var.service_type
 	}
 } 
